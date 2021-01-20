@@ -31,7 +31,7 @@ export default {
                 return;
             }
 
-            axios.get('/chat/room/' + this.room.id + '/message', {
+            axios.post('/chat/rooms/' + this.room.id + '/message', {
                 message: this.message
             })
             .then( response => {

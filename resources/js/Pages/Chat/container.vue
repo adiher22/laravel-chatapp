@@ -2,7 +2,9 @@
     <app-layout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Chat
+                <chat-room-selection
+                
+                />
             </h2>
         </template>
 
@@ -21,12 +23,14 @@
     import AppLayout from '@/Layouts/AppLayout'
     import MessageContainer from './messageContainer.vue'
     import InputMessage from './inputMessage.vue'
+    import ChatRoomSelection from './chatRoomSelection.vue'
 
     export default {
         components: {
             AppLayout,
             MessageContainer,
-            InputMessage    
+            InputMessage,
+                ChatRoomSelection    
         
         },
         data: function() {
@@ -52,7 +56,7 @@
                 this.getMessages();
             },
             getMessages(){
-                axios.get('/chat/room/' + this.currentRoom.id + '/messages')
+                axios.get('/chat/rooms/' + this.currentRoom.id + '/messages')
                 .then( response => {
                     this.messages = response.data;
                     

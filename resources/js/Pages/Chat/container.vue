@@ -3,7 +3,10 @@
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 <chat-room-selection
-                
+                    v-if="currentRoom.id"
+                    :rooms="chatRooms"
+                    :currentRooms="currentRoom"
+                    v-on:roomchanged="setRoom( $event )"
                 />
             </h2>
         </template>

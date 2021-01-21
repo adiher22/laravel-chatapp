@@ -5,7 +5,7 @@
                 <chat-room-selection
                     v-if="currentRoom.id"
                     :rooms="chatRooms"
-                    :currentRooms="currentRoom"
+                    :currentRoom="currentRoom"
                     v-on:roomchanged="setRoom( $event )"
                 />
             </h2>
@@ -43,7 +43,28 @@
                 messages: []
             }
         },
+        watch: {
+            currentRoom( val, oldVal ){
+                if(oldVal.id){
+                    this.disconnect(oldVal)
+                }
+                this.connect();
+            }
+        },
         methods:{
+            connect(){
+                if( this.currentRoom.id){
+                    let vm = this;
+                    this.getMessages();
+                    window.Echo.private("chat." + this.currentRoom.id )
+                    .listen('.message.new', e => {
+                        vm.getMessages();
+                    });
+                }
+            },
+            disconnect( room ){
+                window.Echo.leave("chat." + room.id);
+            },
             getRooms(){
                 axios.get('/chat/rooms')
                 .then( response => {
@@ -56,7 +77,7 @@
             },
             setRoom ( room ){
                 this.currentRoom = room;
-                this.getMessages();
+                
             },
             getMessages(){
                 axios.get('/chat/rooms/' + this.currentRoom.id + '/messages')
